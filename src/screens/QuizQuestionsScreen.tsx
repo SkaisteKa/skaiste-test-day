@@ -18,10 +18,9 @@ const QuizQuestionsScreen: FC<QuizQuestionsScreenProps> = ({
   route,
   navigation,
 }) => {
-  console.log(questions[route.params.index]);
   const currentQuestion = questions[route.params.index];
   const label = currentQuestion.label;
-  const nextPage = Number(route.params.index) + 1;
+  const nextPage = route.params.index + 1;
 
   const { answers, addAnswer, removeAnswer } = useAnswersStore();
 
@@ -44,7 +43,10 @@ const QuizQuestionsScreen: FC<QuizQuestionsScreenProps> = ({
   const handleNavigationToNextScreen = () => {
     console.log(nextPage, questions.length);
     if (nextPage < questions.length)
-      return navigation.navigate("Quiz", { index: nextPage });
+      return navigation.push("Quiz", {
+        index: nextPage,
+        headerTitle: `Step ${route.params.index + 2} of ${questions.length}`,
+      });
     navigation.navigate("Answers");
   };
 

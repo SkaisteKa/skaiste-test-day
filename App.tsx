@@ -6,7 +6,7 @@ import AnswersScreen from "./src/screens/AnswersScreen";
 
 export type RootStackParamList = {
   Home: undefined;
-  Quiz: { index: number };
+  Quiz: { index: number; headerTitle?: string };
   Answers: undefined;
 };
 
@@ -21,9 +21,10 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          // key={(route) => {
-          //   return `profile-${route.params.number}`;
-          // }}
+          key={(route) => route.params.index.toString()}
+          options={({ route }) => ({
+            title: route.params?.headerTitle || "Quizz",
+          })}
           name="Quiz"
           component={QuizQuestionsScreen}
         />

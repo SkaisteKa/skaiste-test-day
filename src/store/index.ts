@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-const useAnswersStore = create((set) => ({
+type AnswersState = {
+  answers: { key: string; value: string[] }[];
+  addAnswer: (key: string, value: string) => void;
+  removeAnswer: (key: string, value: string) => void;
+};
+
+const useAnswersStore = create<AnswersState>((set) => ({
   answers: [],
   addAnswer: (key, value) =>
     set((state) => {

@@ -5,6 +5,9 @@ import { useFonts, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import { ButtonType } from "../components/CustomButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
+import { MOCK_DATA } from "../../assets/mock-data";
+
+const questions = MOCK_DATA.data.questions;
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -19,7 +22,12 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <CustomButton
         type={ButtonType.SINGLE}
         title="Start Quiz"
-        onPress={() => navigation.navigate("Quiz", { index: 0 })}
+        onPress={() =>
+          navigation.push("Quiz", {
+            index: 0,
+            headerTitle: `Step 1 of ${questions.length}`,
+          })
+        }
       />
     </SafeAreaView>
   );
