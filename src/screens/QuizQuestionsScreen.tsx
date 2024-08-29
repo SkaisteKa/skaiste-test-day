@@ -38,15 +38,19 @@ const QuizQuestionsScreen: FC<QuizQuestionsScreenProps> = ({
       addAnswer(currentQuestion.key, value);
     }
     if (currentQuestion.type === ButtonType.SINGLE)
-      navigation.navigate("Quiz", { index: nextPage });
+      handleNavigationToNextScreen();
+  };
+
+  const handleNavigationToNextScreen = () => {
+    console.log(nextPage, questions.length);
+    if (nextPage < questions.length)
+      return navigation.navigate("Quiz", { index: nextPage });
+    navigation.navigate("Answers");
   };
 
   return (
     <View style={styles.container}>
-      <Text
-        style={styles.label}
-        onPress={() => navigation.navigate("Quiz", { index: nextPage })}
-      >
+      <Text style={styles.label} onPress={handleNavigationToNextScreen}>
         {label}
       </Text>
       {currentQuestion.options?.map((options) => (
@@ -67,16 +71,13 @@ const QuizQuestionsScreen: FC<QuizQuestionsScreenProps> = ({
           disabled={
             !answers.find((entry) => entry.key === currentQuestion.key)?.value
           }
-          onPress={() => navigation.navigate("Quiz", { index: nextPage })}
+          onPress={handleNavigationToNextScreen}
         />
       )}
       {currentQuestion.type === ButtonType.INFO && (
         <View>
           <Text style={styles.label}>{currentQuestion.description}</Text>
-          <NextButton
-            title="Next"
-            onPress={() => navigation.navigate("Quiz", { index: nextPage })}
-          />
+          <NextButton title="Next" onPress={handleNavigationToNextScreen} />
         </View>
       )}
     </View>
