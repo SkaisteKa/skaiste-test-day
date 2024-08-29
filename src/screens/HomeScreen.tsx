@@ -1,10 +1,14 @@
 import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import CustomButton from "../components/CustomButton";
 import { useFonts, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import { ButtonType } from "../components/CustomButton";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
 
-const HomeScreen = () => {
+type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
+
+const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_600SemiBold,
   });
@@ -15,7 +19,7 @@ const HomeScreen = () => {
       <CustomButton
         type={ButtonType.SINGLE}
         title="Start Quiz"
-        onPress={() => console.log("button pressed")}
+        onPress={() => navigation.navigate("Quiz", { index: 0 })}
       />
     </SafeAreaView>
   );
