@@ -4,12 +4,18 @@ import React from "react";
 const NextButton = ({
   title,
   onPress,
+  disabled,
 }: {
   title: string;
   onPress?: () => void;
+  disabled?: boolean;
 }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.container, disabled && styles.disabled]}
+      disabled={disabled}
+    >
       <Text style={styles.label}>{title}</Text>
     </TouchableOpacity>
   );
@@ -31,5 +37,8 @@ const styles = StyleSheet.create({
     padding: 16,
     alignSelf: "center",
     color: "#FFFBF3",
+  },
+  disabled: {
+    opacity: 0.5,
   },
 });

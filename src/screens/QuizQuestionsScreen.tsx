@@ -5,6 +5,7 @@ import CustomButton, { ButtonType } from "../components/CustomButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import NextButton from "../components/NextButton";
+import useAnswersStore from "../store";
 
 const questions = MOCK_DATA.data.questions;
 
@@ -22,7 +23,20 @@ const QuizQuestionsScreen: FC<QuizQuestionsScreenProps> = ({
   const label = currentQuestion.label;
   const nextPage = Number(route.params.index) + 1;
 
-  const handleButtonPress = () => {
+  const { answers, addAnswer, removeAnswer } = useAnswersStore();
+
+  console.log("answers", answers);
+
+  const handleAnswerButtonPress = (value: string) => {
+    const isSelected = answers
+      .find((entry) => entry.key === currentQuestion.key)
+      ?.value.includes(value);
+
+    if (isSelected) {
+      removeAnswer(currentQuestion.key, value);
+    } else {
+      addAnswer(currentQuestion.key, value);
+    }
     if (currentQuestion.type === ButtonType.SINGLE)
       navigation.navigate("Quiz", { index: nextPage });
   };
@@ -36,14 +50,34 @@ const QuizQuestionsScreen: FC<QuizQuestionsScreenProps> = ({
         {label}
       </Text>
       {currentQuestion.options?.map((options) => (
-        <CustomButton
-          title={options.label}
-          type={currentQuestion.type}
-          onPress={handleButtonPress}
-        />
+        <View key={options.value}>
+          <CustomButton
+            title={options.label}
+            type={currentQuestion.type}
+            onPress={() => handleAnswerButtonPress(options.value)}
+            selected={answers
+              .find((entry) => entry.key === currentQuestion.key)
+              ?.value.includes(options.value)}
+          />
+        </View>
       ))}
       {currentQuestion.type === ButtonType.MULTIPLE && (
-        <NextButton title="Next" />
+        <NextButton
+          title="Next"
+          disabled={
+            !answers.find((entry) => entry.key === currentQuestion.key)?.value
+          }
+          onPress={() => navigation.navigate("Quiz", { index: nextPage })}
+        />
+      )}
+      {currentQuestion.type === ButtonType.INFO && (
+        <View>
+          <Text style={styles.label}>{currentQuestion.description}</Text>
+          <NextButton
+            title="Next"
+            onPress={() => navigation.navigate("Quiz", { index: nextPage })}
+          />
+        </View>
       )}
     </View>
   );
